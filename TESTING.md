@@ -60,8 +60,7 @@ Headers:
 - Authorization: Bearer {admin_access_token}
 ```json
 {
-    "name": "Test Team",
-    "subject": "Project Management"
+    "name": "Test Team"
 }
 ```
 *Note the team_id from response*
