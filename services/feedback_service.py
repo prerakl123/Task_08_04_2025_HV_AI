@@ -34,7 +34,7 @@ class FeedbackService:
                 Feedback.reviewee_id,
                 func.avg(Feedback.rating).label("avg_rating"),
                 func.count(Feedback.id).label("feedback_count"),
-                func.array_agg(Feedback.comment).label("comments")
+                func.group_concat(Feedback.comment).label("comments")
             )
             .filter(Feedback.team_id == team_id)
             .group_by(Feedback.reviewee_id)
@@ -44,9 +44,9 @@ class FeedbackService:
         return [
             {
                 "reviewee_id": r.reviewee_id,
-                "avg_rating": round(r.avg_rating, 2),
+                "avg_rating": round(float(r.avg_rating), 2),
                 "feedback_count": r.feedback_count,
-                "comments": r.comments  # Comments are included but without reviewer information
+                "comments": r.comments.split(',') if r.comments else []  # Convert comma-separated string to list
             }
             for r in results
         ]

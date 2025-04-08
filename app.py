@@ -71,8 +71,8 @@ def login():
     if not user:
         return jsonify({"error": "Invalid credentials"}), 401
 
-    # Generate an access token
-    token = create_access_token(identity=user.id)
+    # Generate an access token - convert user.id to string
+    token = create_access_token(identity=str(user.id))
     return jsonify(access_token=token), 200
 
 
@@ -86,8 +86,8 @@ def create_team():
     data = TeamCreate(**request.json)
     db = g.db
 
-    # Get the ID of the currently authenticated user
-    user_id = get_jwt_identity()
+    # Convert JWT identity back to integer
+    user_id = int(get_jwt_identity())
     if not is_admin(user_id):
         return jsonify({"error": "Only admins can create teams"}), 403
 

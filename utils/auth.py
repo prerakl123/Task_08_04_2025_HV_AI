@@ -22,7 +22,7 @@ def role_required(role):
         """Decorator to check if the user has the required role."""
         @wraps(func)
         def wrapper(*args, **kwargs):
-            user_id = get_jwt_identity()
+            user_id = int(get_jwt_identity())
             db = SessionLocal()
             user = db.query(User).filter_by(id=user_id).first()
             db.close()
